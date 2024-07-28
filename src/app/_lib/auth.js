@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import { createGuest } from "./data-service";
+import { createGuest, guestByEmail } from "./data-service";
 
 const authConfig = {
   //
@@ -10,21 +10,29 @@ const authConfig = {
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
   ],
-  callback: {
+
+  //
+
+  callbacks: {
     authorized({ auth, request }) {
+      console.log(auth);
+
       return !!auth?.user;
     },
     async signIn({ user }) {
-      console.log(user);
+      //
       try {
-        await createGuest({
-          email: user.email,
-          name: user.name,
-          avatar: user.image,
-        });
+        const guest = await guestByEmail(user.email);
 
-        return true;
-        //
+        if (!guest || guest.length === 0) {
+          await createGuest({
+            email: user.email,
+            name: user.email,
+            avatar: user.image,
+          });
+
+          return true;
+        }
       } catch {
         return false;
       }

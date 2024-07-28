@@ -9,10 +9,9 @@ import Logo from "./Logo";
 const NavLinks = [
   { id: 1, name: "Campions", path: "/campions" },
   { id: 2, name: "Issues", path: "/issues" },
-  { id: 3, name: "SignUp", path: "/account" },
 ];
 
-function Navigation() {
+function Navigation({ user }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav className="relative flex items-center justify-between p-4 sm:px-8 sm:py-4">
@@ -26,6 +25,18 @@ function Navigation() {
               <Link href={link.path}>{link.name}</Link>
             </li>
           ))}
+          {user ? (
+            <li className="flex items-center justify-center gap-1">
+              <img
+                className="h-10 w-10 rounded-3xl"
+                src={user.image}
+                alt={user.name}
+              />
+              <Link href="/account">Account</Link>
+            </li>
+          ) : (
+            <li>{<Link href="/login">SignUp</Link>}</li>
+          )}
         </ul>
       </div>
       {/* mobile nav */}
@@ -41,6 +52,18 @@ function Navigation() {
               <Link href={link.path}>{link.name}</Link>
             </li>
           ))}
+          {user ? (
+            <li className="flex">
+              <img
+                className="h-6 w-6 rounded-3xl"
+                src={user.image}
+                alt={user.name}
+              />
+              <Link href="/account">Account</Link>
+            </li>
+          ) : (
+            <li>{<Link href="/login">SignUp</Link>}</li>
+          )}
         </ul>
       )}
     </nav>

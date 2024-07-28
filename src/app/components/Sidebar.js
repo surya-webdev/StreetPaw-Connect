@@ -1,9 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import Logo from "./Logo";
 
-function Sidebar({ className }) {
+import { signOutAction } from "../_lib/action";
+
+function Sidebar({ className, user }) {
   return (
     <div className={`${className} j flex flex-col justify-between`}>
       <div className="flex flex-col justify-center gap-10 py-2">
@@ -29,8 +28,10 @@ function Sidebar({ className }) {
         </ul>
       </div>
       <div className="flex flex-col gap-5 justify-self-end px-5 py-10">
-        <Link href="#">Surya</Link>
-        <Link href="#">Sign Out</Link>
+        <Link href="#">{user?.name}</Link>
+        <form action={signOutAction}>
+          <button>Sign Out</button>
+        </form>
       </div>
     </div>
   );
